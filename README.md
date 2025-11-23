@@ -1,4 +1,4 @@
-# PicoCTF Writeups — Summarized (83 Challenges) - 
+# PicoCTF Writeups — Summarized (83 Challenges)
 Difficulty: EASY 
 
 This README is a collection of short summaries for the 83 PicoCTF challenges I've worked through.  
