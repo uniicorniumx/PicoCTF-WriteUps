@@ -11,25 +11,25 @@ I’ve also included each challenge’s ID so you can match them directly with t
 ### ID 529 — Pico Bank
 
 # Approach:
-# --- First Part of the Flag ---
-# If you inspect MainActivity.class (via JADX or similar), you can see the transaction data
-# is stored as binary values. These binary values are actually character codes.
-# Convert each binary amount to its ASCII character equivalent and concatenate them to obtain the FIRST part of the flag.
+--- First Part of the Flag ---
+If you inspect MainActivity.class (via JADX or similar), you can see the transaction data
+is stored as binary values. These binary values are actually character codes.
+Convert each binary amount to its ASCII character equivalent and concatenate them to obtain the FIRST part of the flag.
 
-# 1. Run the APK inside an Android emulator.
-# 2. Inspect the APK (via emulator, jadx, or apktool) to locate hardcoded credentials.
-# Username: JOHNSON
-# Password: TRICKY1990
-# 3. Log into the app → it requests an OTP.
-# 4. Observe the OTP request flow and extract the OTP value.
-# 5. Use curl to send the OTP directly to the backend API endpoint.
+1. Run the APK inside an Android emulator.
+2. Inspect the APK (via emulator, jadx, or apktool) to locate hardcoded credentials.
+Username: JOHNSON
+Password: TRICKY1990
+3. Log into the app → it requests an OTP.
+4. Observe the OTP request flow and extract the OTP value.
+5. Use curl to send the OTP directly to the backend API endpoint.
 
 # --- Second Part of the Flag ---
-# Command used to submit OTP:
+Command used to submit OTP:
 curl -X POST http://XXXXXXXX.XXXXX.XXX:XXXXX/verify-otp \
 -H "Content-Type: application/json" \
 -d '{"otp":"9673"}'
-# The server returns the final portion of the PicoCTF flag.
+The server returns the final portion of the PicoCTF flag.
 
 ---
 
