@@ -10,7 +10,7 @@ I’ve also included each challenge’s ID so you can match them directly with t
 
 ### ID 529 — Pico Bank
 
-# Approach:
+## Approach:
 --- First Part of the Flag ---
 If you inspect MainActivity.class (via JADX or similar), you can see the transaction data
 is stored as binary values. These binary values are actually character codes.
@@ -24,7 +24,7 @@ Password: TRICKY1990
 4. Observe the OTP request flow and extract the OTP value.
 5. Use curl to send the OTP directly to the backend API endpoint.
 
-# --- Second Part of the Flag ---
+## --- Second Part of the Flag ---
 Command used to submit OTP:
 curl -X POST http://XXXXXXXX.XXXXX.XXX:XXXXX/verify-otp \
 -H "Content-Type: application/json" \
@@ -35,16 +35,16 @@ The server returns the final portion of the PicoCTF flag.
 
 ### ID 528 — M1n10n'5_53cr37
 
-apktool d minions.apk -o minions_out
-Open minions_out/res/values/strings.xml
-Find ´<string name="Banana">...</string>´
-Base32-decode that value → flag
+1. apktool d minions.apk -o minions_out
+2. Open minions_out/res/values/strings.xml
+3. Find ´<string name="Banana">...</string>´
+4. Base32-decode that value → flag
 
 ---
 
 ### ID 521 — Crack the Gate 2
 
-# Approach:
+## Approach:
 1. Extract the provided binary or APK (depending on challenge format) and inspect the main logic.
 2. Open the executable in a disassembler (e.g., Ghidra, Radare2, or JADX if Android).
 3. Locate the gate-checking function: the program verifies input by applying a sequence of bitwise operations, shifts, XORs, and arithmetic transformations.
