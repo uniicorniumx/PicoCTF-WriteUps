@@ -1,4 +1,4 @@
-# PicoCTF Writeups — Summarized - WIP
+### PicoCTF Writeups — Summarized - WIP
 Difficulty: MEDIUM 
 
 This README is a collection of short summaries for the (WIP) PicoCTF challenges I've worked through.  
@@ -39,3 +39,15 @@ apktool d minions.apk -o minions_out
 Open minions_out/res/values/strings.xml
 Find ´<string name="Banana">...</string>´
 Base32-decode that value → flag
+
+---
+
+### ID 521 — Crack the Gate 2
+
+# Approach:
+1. Extract the provided binary or APK (depending on challenge format) and inspect the main logic.
+2. Open the executable in a disassembler (e.g., Ghidra, Radare2, or JADX if Android).
+3. Locate the gate-checking function: the program verifies input by applying a sequence of bitwise operations, shifts, XORs, and arithmetic transformations.
+4. Reverse the logic: work backwards from the final comparison value to recover the correct input. Reconstruct the gate key by inverting each transformation step.
+5. Once the correct gate key is reconstructed, run the program with the recovered input.
+6. The output reveals the final flag.
