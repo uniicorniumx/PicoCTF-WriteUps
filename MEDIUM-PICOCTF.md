@@ -26,7 +26,7 @@ Password: TRICKY1990
 
 ## --- Second Part of the Flag ---
 Command used to submit OTP:
-curl -X POST http://XXXXXXXX.XXXXX.XXX:XXXXX/verify-otp \
+curl -X POST http://XXXXXXXX.XXXXX.XXX:XXXXX/verify-otp \ (url is the instance given when lauching instance)
 -H "Content-Type: application/json" \
 -d '{"otp":"9673"}'
 The server returns the final portion of the PicoCTF flag.
