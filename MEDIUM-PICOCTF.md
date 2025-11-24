@@ -37,7 +37,7 @@ The server returns the final portion of the PicoCTF flag.
 
 1. apktool d minions.apk -o minions_out
 2. Open minions_out/res/values/strings.xml
-3. Find <string name="Banana">...</string>
+3. Find 'Banana' String (Use Grep or Strings)
 4. Base32-decode that value → flag
 
 ---
