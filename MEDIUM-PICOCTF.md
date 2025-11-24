@@ -1,7 +1,7 @@
 # PicoCTF Writeups — Summarized - WIP
 Difficulty: MEDIUM 
 
-This README is a collection of short summaries for the 83 PicoCTF challenges I've worked through.  
+This README is a collection of short summaries for the (WIP) PicoCTF challenges I've worked through.  
 I’m not going into full writeups here — the goal is simply to show what each challenge was about, how I approached it, and what ideas or techniques solved it.
 
 I’ve also included each challenge’s ID so you can match them directly with the ones on the PicoCTF platform.
