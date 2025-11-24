@@ -1,4 +1,4 @@
-### PicoCTF Writeups — Summarized - WIP
+# PicoCTF Writeups — Summarized - WIP
 Difficulty: MEDIUM 
 
 This README is a collection of short summaries for the (WIP) PicoCTF challenges I've worked through.  
