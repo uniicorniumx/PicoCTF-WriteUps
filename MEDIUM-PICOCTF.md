@@ -58,9 +58,14 @@ The server returns the final portion of the PicoCTF flag.
 
 ## Approach:
 The program allocates two heap buffers (`username` and `shell`) and reads into `username` with `scanf("%s")`, allowing an unbounded heap overflow.
+
 The distance between both buffers is 48 bytes, so overflowing `username` by 48 bytes overwrites the beginning of `shell`, which is later executed with `system(shell)`.
+
 Exploit payload:
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcat${IFS}flag.txt
+
 (48 `A`'s + `cat${IFS}flag.txt`)
-This overwrites `/bin/pwd` with our command and prints the flag.
+
+This overwrites `/bin/pwd` with our command and prints the flag. 
+
 Root cause: unsafe input handling and execution of user-controlled heap data.
