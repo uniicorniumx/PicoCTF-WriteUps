@@ -51,3 +51,16 @@ The server returns the final portion of the PicoCTF flag.
 4. Reverse the logic: work backwards from the final comparison value to recover the correct input. Reconstruct the gate key by inverting each transformation step.
 5. Once the correct gate key is reconstructed, run the program with the recovered input.
 6. The output reveals the final flag.
+
+---
+
+### ID 526 — Input Injection 2
+
+## Approach:
+The program allocates two heap buffers (`username` and `shell`) and reads into `username` with `scanf("%s")`, allowing an unbounded heap overflow.
+The distance between both buffers is 48 bytes, so overflowing `username` by 48 bytes overwrites the beginning of `shell`, which is later executed with `system(shell)`.
+Exploit payload:
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcat${IFS}flag.txt
+(48 `A`'s + `cat${IFS}flag.txt`)
+This overwrites `/bin/pwd` with our command and prints the flag.
+Root cause: unsafe input handling and execution of user-controlled heap data.
