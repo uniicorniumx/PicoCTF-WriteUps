@@ -88,3 +88,18 @@ By overflowing buffer with more than 10 characters, I overwrite c with my own co
 Payload: AAAAAAAAAAcat${IFS}flag.txt (10 A’s overflow buffer, the rest overwrites c)
 
 Result: system() executes cat flag.txt.
+
+---
+
+### ID 522 — Crack the Power
+
+## Approach:
+The challenge gives `n`, `e = 20`, and `c`.  
+Because the plaintext was small enough that:
+
+```
+m^20 < n
+```
+(Had loads of help here lol)
+To decrypt, we just compute the integer 20th root of c and then convert it to bytes and get the flag.
+
