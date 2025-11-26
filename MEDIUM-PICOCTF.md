@@ -178,3 +178,32 @@ wc -l linux_flags.txt
 cat linux_flags.txt
 ```
 Only one unique flag exists on the Linux side. this is the correct one.
+
+---
+
+### ID 494 — Pachinko
+
+## Approach:
+1. Discovered the UI’s dots represent wire IDs:
+```
+- **Inputs:** 5, 6, 7, 8  
+- **Outputs:** 1, 2, 3, 4  
+```
+The backend expects the circuit in JSON form:
+```
+json
+[
+  { "input1": X, "input2": X, "output": Y }
+]
+```
+Each entry = one NAND gate.
+OUT1 = NOT(IN5)
+OUT2 = NOT(IN6)
+OUT3 = NOT(IN7)
+OUT4 = NOT(IN8)
+
+2. Submit & Debug
+DevTools → Network → Payload to see how the browser encoded our circuit.
+Once correct, the /check response returned:
+{ "status": "success", "flag": "picoCTF{...}" }
+Copied the flag from the Network → Response tab instead of the popup.
