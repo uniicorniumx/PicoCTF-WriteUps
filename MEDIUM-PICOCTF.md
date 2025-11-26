@@ -103,3 +103,15 @@ m^20 < n
 (Had loads of help here lol)
 To decrypt, we just compute the integer 20th root of c and then convert it to bytes and get the flag.
 
+---
+
+### ID 507 — DISKO 3
+
+## Approach:
+Given a raw disk image (`disko-3.dd`), the goal was to locate a hidden flag inside the filesystem.
+1. Identify the disk type - file disko-3.dd
+2. Check partitions - fdisk -l disko-3.dd
+3. Mount using correct offset - sudo mount -o loop,offset=$((2048*512)) disko-3.dd /mnt 
+4. Navigate into logs folder: ls -la /mnt/log - Found suspicious file: `flag.gz`
+5. Extract the flag - gunzip -c /mnt/log/flag.gz
+
