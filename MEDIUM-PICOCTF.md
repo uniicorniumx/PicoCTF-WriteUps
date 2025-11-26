@@ -108,10 +108,73 @@ To decrypt, we just compute the integer 20th root of c and then convert it to by
 ### ID 507 — DISKO 3
 
 ## Approach:
-Given a raw disk image (`disko-3.dd`), the goal was to locate a hidden flag inside the filesystem.
+After unziping the disco image (`disko-3.dd`), the goal was to locate a hidden flag inside the filesystem.
 1. Identify the disk type - file disko-3.dd
 2. Check partitions - fdisk -l disko-3.dd
 3. Mount using correct offset - sudo mount -o loop,offset=$((2048*512)) disko-3.dd /mnt 
 4. Navigate into logs folder: ls -la /mnt/log - Found suspicious file: `flag.gz`
 5. Extract the flag - gunzip -c /mnt/log/flag.gz
 
+---
+
+### ID 506 — DISKO 2
+
+## Approach:
+You are given a gzipped disk image (`disko-2.dd.gz`).  
+The description hints:
+
+> “The right one is Linux! One wrong step and it's all gone!”
+
+This means:
+- The image contains **multiple partitions**.
+- Only the **Linux partition** contains the real flag.
+- The FAT32 partition contains **decoy flags** meant to mislead you. 
+- I didn't realized this at first lol.
+
+
+1. Decompress & Inspect the Disk Image
+
+```
+bash
+gunzip disko-2.dd.gz
+
+# Inspect partitions
+sudo fdisk -l disko-2.dd
+```
+
+2. Attach the Image as a Loop Device
+```
+sudo losetup -fP disko-2.dd
+losetup -a
+```
+
+3. Mount Both Partitions
+Linux
+```
+sudo mount -o ro /dev/loop0p1 /mnt
+```
+FAT32
+```
+sudo mkdir /mnt2
+sudo mount -o ro /dev/loop0p2 /mnt2
+```
+4. Decoy Flags in the FAT32 Partition
+Searching for flags in FAT32:
+```
+grep -Ri "picoCTF" -n /mnt2/log 2>/dev/null
+```
+You will find many fake flags such as:
+```
+picoCTF{4_P4Rt_1t_i5_xxxxxxxx}
+```
+These are decoys intentionally placed in the wrong partition.
+The hint warns against following this path.
+
+5. Extract the Real Flag from the Linux Partition
+Search inside the Linux partition block device:
+```
+sudo strings /dev/loop0p1 | grep "picoCTF{" | sort -u > linux_flags.txt
+wc -l linux_flags.txt
+cat linux_flags.txt
+```
+Only one unique flag exists on the Linux side. this is the correct one.
