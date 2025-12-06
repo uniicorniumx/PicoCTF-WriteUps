@@ -470,7 +470,6 @@ chmod +x /tmp/md5sum
 ### ID 483 — YaraRules0x100
 
 ## Approach:
-##Approach:
 1. The challenge gives a ZIP containing a Windows executable.
 unzip suspicious.zip
 password: picoctf
