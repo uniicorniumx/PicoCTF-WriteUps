@@ -463,3 +463,86 @@ chmod +x /tmp/md5sum
     7. Run the binary again to trigger the exploit:
         ./flaghasher
         → the program now executes our fake md5sum as root and prints the real flag.
+
+---
+
+##ID 483 — YaraRules0x100
+##Approach:
+1. The challenge gives a ZIP containing a Windows executable.
+unzip suspicious.zip
+password: picoctf
+This extracts a file we call:
+suspicious.exe
+
+2. Perform initial static analysis
+Run:
+strings suspicious.exe
+Observations:
+The file contains:
+UPX0
+UPX1
+UPX!
+→ indicating the executable is UPX-packed
+An unusual packed section string appears:
+.text$div
+
+In the unpacked payload, I also find:
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+ADVAPI32.dll
+These become our detection anchors.
+
+3. Understand the actual challenge requirement
+The remote checker tests your rule against a malware family, not just the one file you downloaded.
+This includes:
+packed versions
+unpacked versions
+slightly altered variants
+Your YARA rule has to:
+Detect all malicious samples → no false negatives
+Detect only malicious samples → no false positives
+A single-string rule fails because some variants do not contain the same strings.
+
+5. Identify what can be exploited
+Look for stable indicators present across all variants.
+From analysis:
+Packed version stable indicator:
+.text$div
+This UPX-generated section string exists in every packed sample.
+Unpacked version stable indicators:
+<?xml version='1.0' encoding='UTF-8' standalone='yes'?>
+ADVAPI32.dll
+These appear together in every unpacked sample.
+So, the solution is to create two rules:
+- one for the packed malware
+- one for the unpacked malware
+Both have to exist in the same file, because the checker loads the entire file.
+
+5. Prepare the payload (final YARA rule file)
+Save the following to yourfilenamegoeshere.txt:
+```
+rule suspacked {
+    strings:
+        $packed_div = ".text$div"
+    condition:
+        all of them
+}
+
+rule susunpacked {
+    strings:
+        $unpacked_xml = "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>"
+        $unpacked_dll = "ADVAPI32.dll"
+    condition:
+        all of them
+}
+```
+This pair of rules detects the complete malware family.
+
+6. Test locally
+yara yourfilename suspicious.exe
+You should see at least one match of the rules.
+
+7. Submit to the challenge server
+socat -t60 - TCP:standard-pizzas.picoctf.net:XXXXX < yourfilename.txt
+Expected output when your rules pass:
+Status: Success
+picoCTF{...flag_here...}     
