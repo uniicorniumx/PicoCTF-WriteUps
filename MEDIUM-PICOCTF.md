@@ -504,7 +504,7 @@ Detect all malicious samples → no false negatives
 Detect only malicious samples → no false positives
 A single-string rule fails because some variants do not contain the same strings.
 
-5. Identify what can be exploited
+5. Identify what can be exploited:
 Look for stable indicators present across all variants.
 From analysis:
 Packed version stable indicator:
@@ -519,10 +519,10 @@ So, the solution is to create two rules:
 - one for the unpacked malware
 Both have to exist in the same file, because the checker loads the entire file.
 
-5. Prepare the payload (final YARA rule file)
+5. Prepare the payload (final YARA rule file):
 Save the following to yourfilenamegoeshere.txt:
 ```
-rule suspacked {
+rule suspacked { //you can call it whatever
     strings:
         $packed_div = ".text$div"
     condition:
@@ -540,10 +540,10 @@ rule susunpacked {
 This pair of rules detects the complete malware family.
 
 6. Test locally
-yara yourfilename suspicious.exe
+yara yourfilename suspicious.exe.
 You should see at least one match of the rules.
 
-7. Submit to the challenge server
+7. Submit to the challenge server:
 socat -t60 - TCP:standard-pizzas.picoctf.net:XXXXX < yourfilename.txt
 Expected output when your rules pass:
 Status: Success
