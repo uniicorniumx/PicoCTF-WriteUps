@@ -547,4 +547,11 @@ You should see at least one match of the rules.
 socat -t60 - TCP:standard-pizzas.picoctf.net:XXXXX < yourfilename.txt
 Expected output when your rules pass:
 Status: Success
-picoCTF{...flag_here...}     
+picoCTF{...flag_here...}
+
+--------------------------------------------------------------
+I was spending more time writing all this info than actually doing the CTF's lol so I decided to just paste my progress with answers. PS: No use to just copy and paste, most are user unique.
+--------------------------------------------------------------
+
+### ID 358 — More SQLi
+picoCTF{G3tting_5QL_1nJ3c7I0N_l1k3_y0u_sh0ulD_3b0fca37}
